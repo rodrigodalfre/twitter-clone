@@ -2,28 +2,23 @@
 
 namespace App;
 
-class Conexao {
+class Connection {
 
-    private $host = 'localhost';
-    private $dbname = "mvc";
-    private $user = 'root';
-    private $pass = '';
+	public static function getDb() {
+		try {
 
-    //Metodos static não é necessário criar uma classe, basta usar a referencia. Connection::getDb()
-    public static function getDb() {
-        try {
-            $conexao = new PDO(
-                "mysql:host=$this->host;dbname=$this->dbname",
-                "$this->user",
-                "$this->pass"
-            );   
-        
-            return $conexao;
-        } catch (\PDOException $e) {
-            echo $e->getMessege();
-        }
-    }
+			$conn = new \PDO(
+				"mysql:host=localhost;dbname=twitter_clone;charset=utf8",
+				"root",
+				"" 
+			);
 
+			return $conn;
+
+		} catch (\PDOException $e) {
+			//.. tratar de alguma forma ..//
+		}
+	}
 }
 
 ?>
