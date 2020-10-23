@@ -9,8 +9,10 @@ use MF\Model\Container;
 class IndexController extends Action {
 
 	public function index() {
-		$this->render('index');
 
+		$this->view->login = isset($_GET['login']) ? $_GET['login'] : '';
+
+		$this->render('index');
 	}
 
 	public function inscreverse() {
@@ -35,7 +37,6 @@ class IndexController extends Action {
 		$usuario->__set('senha', $_POST['senha']);
 
 		if($usuario->validarCadastro() && count($usuario->getUsuarioEmail()) == 0){
-			
 			$usuario->salvar();
 			$this->render('cadastro');
 
@@ -53,9 +54,6 @@ class IndexController extends Action {
 
 		}
 		
-
-		// print_r($usuario);
-
 	}
 
 
