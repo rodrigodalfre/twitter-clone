@@ -17,7 +17,6 @@ class AppController extends Action {
 
         $tweet->__set('id_usuario', $_SESSION['id']);
 
-
         $this->view->tweets = $tweet->getAll();
 
         $this->render('timeline');
@@ -36,7 +35,6 @@ class AppController extends Action {
         $tweet->salvar();
 
         header('Location: /timeline');
-
     
     }
 
@@ -48,6 +46,27 @@ class AppController extends Action {
         !isset($_SESSION['nome']) || $_SESSION['nome'] == '' ){
             header('Location: /?login=erro');
         }
+    }
+
+    public function quemSeguir() {
+        $this->validaSessao();
+
+        $pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
+
+        $usuarios = array();
+
+        if($pesquisarPor != ''){
+            
+            $usuario = Container::getModel('Usuario');
+            $usuario->__set('nome', $pesquisarPor);
+            $usuarios = $usuario->getAll();
+        }
+
+        $this->view->usuarios = $usuarios;
+
+        $this->render('quemSeguir');
+
+
     }
 
 }
