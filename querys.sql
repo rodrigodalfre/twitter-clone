@@ -18,3 +18,11 @@ create table tweets(
     data datetime default current_timestamp
 
 );
+
+-- USUARIOS SEGUIDORES
+
+create table usuarios_seguidores(
+    id int not null primary key AUTO_INCREMENT,
+    id_usuario int not null,
+    id_usuario_seguindo int not null
+);

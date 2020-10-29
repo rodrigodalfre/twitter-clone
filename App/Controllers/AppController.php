@@ -59,12 +59,33 @@ class AppController extends Action {
             
             $usuario = Container::getModel('Usuario');
             $usuario->__set('nome', $pesquisarPor);
+            $usuario->__set('id', $_SESSION['id']);
             $usuarios = $usuario->getAll();
         }
 
         $this->view->usuarios = $usuarios;
 
         $this->render('quemSeguir');
+
+    }
+
+    public function acao() {
+        $this->validaSessao();
+
+        $acao = isset($_GET['acao']) ? $_GET['acao'] : '';
+        $id = isset($_GET['id_usuario']) ? $_GET['id_usuario'] : '';
+        echo $acao.'<br>'.$id;
+
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id', $_SESSION['id']);
+
+        if($acao == 'follow'){
+            $usuario->follow($id);
+
+        } else if($acao == 'unfollow'){
+            $usuario->unfollow($id);
+
+        }
 
 
     }

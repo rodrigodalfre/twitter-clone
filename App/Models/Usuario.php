@@ -83,15 +83,40 @@ class Usuario extends Model{
         FROM
             usuarios
         WHERE
-            nome like :nome
+            nome like :nome AND id != :id_usuario
         ";
         $stmt = $this->db->prepare($query);
         //O like espera o caractere coringa (%) para ter uma pesquisa mais ampla
         $stmt->bindValue(':nome', '%'.$this->__get('nome').'%');
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function follow($id){
+        $query = "INSERT INTO usuarios_seguidores(id_usuario, id_usuario_seguindo) 
+            VALUES(:id_usuario, :id_usuario_seguindo)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->bindValue('id_usuario_seguindo', $id);
+        $stmt->execute();
+
+        return true;
+    }
+
+    public function unfollow($id){
+        $query = "DELETE FROM usuarios_seguidores
+        WHERE
+            id_usuario = :id_usuario 
+        AND 
+            id_usuario_seguindo = :id_usuario_seguindo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->bindValue('id_usuario_seguindo', $id);
+        $stmt->execute();
+    }
+
 
 
 
