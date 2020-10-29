@@ -12,12 +12,22 @@ class AppController extends Action {
 
         $this->validaSessao();
 
-        //recuperar tweets
+        //recuperar tweets e instancia de tweet
         $tweet = Container::getModel('Tweet');
 
         $tweet->__set('id_usuario', $_SESSION['id']);
 
         $this->view->tweets = $tweet->getAll();
+
+        //Instancia de Usuario
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id_usuario', $_SESSION['id']);
+
+        $this->view->info_user = $usuario->GetInfoUser(); //Informações do Usuário (nome)
+        $this->view->total_tweets = $usuario->getTotalTweets(); //Total de Tweets (tweets)
+        $this->view->total_follow = $usuario->getTotalFollow(); //Total Seguindo (total_seguindo)
+        $this->view->total_followers = $usuario->getTotalFollowers(); //Total Seguidores (total_seguidores)
+                
 
         $this->render('timeline');
         
@@ -33,7 +43,7 @@ class AppController extends Action {
         $tweet->__set('id_usuario', $_SESSION['id']);
 
         $tweet->salvar();
-
+        
         header('Location: /timeline');
     
     }
@@ -63,6 +73,15 @@ class AppController extends Action {
             $usuarios = $usuario->getAll();
         }
 
+         //Instancia de Usuario
+         $usuario = Container::getModel('Usuario');
+         $usuario->__set('id_usuario', $_SESSION['id']);
+ 
+         $this->view->info_user = $usuario->GetInfoUser(); //Informações do Usuário (nome)
+         $this->view->total_tweets = $usuario->getTotalTweets(); //Total de Tweets (tweets)
+         $this->view->total_follow = $usuario->getTotalFollow(); //Total Seguindo (total_seguindo)
+         $this->view->total_followers = $usuario->getTotalFollowers(); //Total Seguidores (total_seguidores)
+
         $this->view->usuarios = $usuarios;
 
         $this->render('quemSeguir');
@@ -88,6 +107,20 @@ class AppController extends Action {
         }
 
         header('Location: /quem_seguir');
+
+    }
+
+    public function remover() {
+        $this->validaSessao();
+        
+        $usuario = Container::getModel('Tweet');
+        $usuario->__set('id_usuario', $_SESSION['id']);
+        $usuario->__set('id', $_POST['id']);
+
+        $usuario->remover();
+
+        header('location: /timeline');
+
 
     }
 

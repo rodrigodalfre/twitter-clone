@@ -34,13 +34,25 @@ class Tweet extends Model{
     //recuperar
     public function getAll(){
         $query = "SELECT 
-            t.id, t.id_usuario, u.nome, t.tweet, DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as data
+            t.id, 
+				t.id_usuario, 
+				u.nome, 
+				t.tweet, 
+				DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as data
         FROM
             tweets as t
         LEFT JOIN
             usuarios as u on (t.id_usuario = u.id)
         WHERE
             t.id_usuario = :id_usuario
+				or
+				t.id_usuario in(
+					SELECT 
+						id_usuario_seguindo 
+					FROM 
+						usuarios_seguidores 
+					where 
+						id_usuario = :id_usuario)
         ORDER BY
             t.data desc
         ";
@@ -49,7 +61,18 @@ class Tweet extends Model{
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
+	 }
+
+	 public function remover() {
+		$query = "DELETE FROM tweets WHERE id_usuario = :id_usuario AND id = :id ";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':id_usuario', $this->__get('id_usuario'));
+		$stmt->bindValue(':id', $this->__get('id'));
+		$stmt->execute();
+
+		return true;
+	 }
+	 
 
 }
 
