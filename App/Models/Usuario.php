@@ -77,13 +77,19 @@ class Usuario extends Model{
         return $this;
     }
 
+    //GET ALL
+    //Sub-consulta utilizando()
     public function getAll(){
         $query = "SELECT
-            id, nome, email
+            u.id, u.nome, u.email, 
+            (   select count(*)
+                from usuarios_seguidores as us
+                where us.id_usuario = :id_usuario and us.id_usuario_seguindo = u.id
+            ) as seguindo_sn
         FROM
-            usuarios
+            usuarios as u
         WHERE
-            nome like :nome AND id != :id_usuario
+            u.nome like :nome AND u.id != :id_usuario
         ";
         $stmt = $this->db->prepare($query);
         //O like espera o caractere coringa (%) para ter uma pesquisa mais ampla

@@ -87,8 +87,16 @@
 								
 									<div class="col-md-6 d-flex justify-content-end">
 										<div>
-											<a href="/acao?acao=follow&id_usuario=<?= $usuario['id'] ?>" class="btn btn-success">Seguir</a>
-											<a href="/acao?acao=unfollow&id_usuario=<?= $usuario['id'] ?>" class="btn btn-danger">Deixar de seguir</a>
+
+											<!-- LÓGICA DE SE ESTIVER SEGUINDO OU NÃO -->
+											<?php if($usuario['seguindo_sn'] == 0) { ?>
+												<a href="/acao?acao=follow&id_usuario=<?= $usuario['id'] ?>" class="btn btn-success">Seguir</a>
+											<?php } ?>
+											
+											<?php if($usuario['seguindo_sn'] == 1) { ?>
+												<a href="/acao?acao=unfollow&id_usuario=<?= $usuario['id'] ?>" class="btn btn-danger">Deixar de seguir</a>
+											<?php } ?>
+
 										</div>
 									</div>
 								</div>
